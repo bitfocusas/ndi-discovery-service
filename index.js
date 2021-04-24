@@ -94,14 +94,37 @@ const server = net.createServer((conn) => {
 						let location = "ILLEGAL"
 						if (addr.match(/^10\.20\.102\./)) location = "OSS"
 						else if (addr.match(/^10\.20\.30\./)) location = "SERVER"
-						else if (addr.match(/^10\.20\.10\./)) location = "TMLB"
+						else if (addr.match(/^10\.20\.10\./)) location = "KG5"
+						else if (addr.match(/^10\.20\.11\./)) location = "KG5"
+						else if (addr.match(/^10\.40\.10\./)) location = "OBR1"
+						else if (addr.match(/^10\.40\.20\./)) location = "OBR2"
+						else if (addr.match(/^10\.40\.30\./)) location = "OBR3"
+						else if (addr.match(/^10\.40\.40\./)) location = "OBR4"
+						else if (addr.match(/^10\.40\.50\./)) location = "OBR5"
+						else if (addr.match(/^10\.40\.60\./)) location = "OBR6"
+						else if (addr.match(/^10\.40\.70\./)) location = "OBR7"
+						else if (addr.match(/^10\.40\.80\./)) location = "OBR8"
+						else if (addr.match(/^10\.40\.91\./)) location = "OBA1"
+						else if (addr.match(/^10\.40\.92\./)) location = "OBA2"
+						else if (addr.match(/^10\.40\.93\./)) location = "OBA3"
+						else if (addr.match(/^10\.40\.94\./)) location = "OBA4"
+						else if (addr.match(/^10\.40\.95\./)) location = "OBA5"
+						else if (addr.match(/^10\.40\.96\./)) location = "OBA6"
+						else if (addr.match(/^10\.40\.97\./)) location = "OBA7"
+						else if (addr.match(/^10\.40\.98\./)) location = "OBA8"
+						else if (addr.match(/^10\.40\.99\./)) location = "OBA9"
+						else if (addr.match(/^10\.40\.220\./)) location = "OBC1"
+						else if (addr.match(/^10\.40\.221\./)) location = "TCR1"
+						else if (addr.match(/^10\.40\.222\./)) location = "TCR2"
+						else if (addr.match(/^10\.47\.1\./)) location = "NLTV-R1"
 						else if (addr.match(/^10\.40\./)) location = "EXT OB"
 						else if (addr.match(/^10\.47\./)) location = "NLTV"
+						else if (addr.match(/^80.241.92.21[59]/)) location = "UV89"
 						
 						host = host.replace(/\.LOCAL/,"");
 
 						if (label === 'Decoding Channel') allowed = false;
-						let loc = '[' + location.toUpperCase() + "] " + host.toUpperCase()
+						let loc = location.toUpperCase() + " - " + host.toUpperCase()
 						res.source.name[0] = `${loc} (${label})`
 
 						console.log("NEW NAME IS", res.source.name[0]);
