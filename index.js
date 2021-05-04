@@ -6,6 +6,7 @@ let sources = [];
 const listeners = [];
 
 const server = net.createServer((conn) => {
+	conn.setKeepAlive(60000); // make sure connections are timed out if interrupted
 	console.log("Connection from ", conn.remoteAddress);
 	connections.push(conn);
 	conn.myBuffer = Buffer.from("")
@@ -39,7 +40,7 @@ const server = net.createServer((conn) => {
 	}
 
 	function closeConnection(conn) {
-		console.log("closeConnection()",conn)
+		console.log("closeConnection()")
 		let idx = connections.indexOf(conn);
 		if (idx > -1) {
 			connections.splice(idx, 1);
@@ -58,7 +59,7 @@ const server = net.createServer((conn) => {
 	}
 
 	function handleData(data) {
-		console.log("handleData", data);
+		console.log("handleData (%o bytes)", data.length);
 		const info = data.toString().replace(/\x0/g, '');
 
 		xml2js.parseString(info, (err, res) => {
@@ -81,13 +82,10 @@ const server = net.createServer((conn) => {
 				if (res.source.address && res.source.address.length > 0 && res.source.address[0] === '0.0.0.0') {
 					res.source.address[0] = conn.remoteAddress.replace(/^::ffff:/,'');
 				}
-				console.log("YAY 0")
 				if (res.source.name !== undefined && res.source.name[0] !== undefined) {
 
 					const match = res.source.name[0].match(/^(.+) \((.+)\)$/);
-					console.log("YAY 1")
 					if (match !== null && res.source.address !== undefined) {	
-						console.log("YAY 2")
 						let addr = res.source.address[0] || '';
 						let [ all, host, label ] = match;
 						
@@ -126,9 +124,6 @@ const server = net.createServer((conn) => {
 						if (label === 'Decoding Channel') allowed = false;
 						let loc = location.toUpperCase() + " - " + host.toUpperCase()
 						res.source.name[0] = `${loc} (${label})`
-
-						console.log("NEW NAME IS", res.source.name[0]);
-
 					}
 
 				}
@@ -143,8 +138,6 @@ const server = net.createServer((conn) => {
 				}
 			}
 
-			console.log("xml parsed to: ", res);
-
 		});
 	}
 
@@ -154,12 +147,11 @@ const server = net.createServer((conn) => {
 		while ((idx = conn.myBuffer.indexOf('\0')) > -1) {
 			handleData(conn.myBuffer.slice(0, idx));
 			conn.myBuffer = conn.myBuffer.slice(idx+1);
-			console.log("New buffer: %o", conn.myBuffer);
 		}
 	}
 
 	conn.on('data', (data) => {
-		console.log("conn.on(data):", data);
+		console.log("conn.on(data): %o bytes", data.length);
 		conn.myBuffer = Buffer.concat([conn.myBuffer, data]);
 		checkBuffer();
 	});
