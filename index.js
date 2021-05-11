@@ -89,6 +89,16 @@ const server = net.createServer((conn) => {
 						let addr = res.source.address[0] || '';
 						let [ all, host, label ] = match;
 						
+						if (addr.match(/^10\.20\.102\.118/)) {
+							sources.push({
+								source: res.source,
+								socket: conn,
+								ts: Date.now()
+							});
+							publishAddSource(res.source);
+							return;
+						}
+
 						let location = "ILLEGAL"
 						if (addr.match(/^10\.20\.102\./)) location = "OSS"
 						else if (addr.match(/^10\.20\.30\./)) location = "SERVER"
