@@ -101,7 +101,7 @@ const server = net.createServer((conn) => {
 
 						let location = "ILLEGAL"
 						if (addr.match(/^10\.20\.10[123456789]\./)) location = "OSS"
-						else if (addr.match(/^10\.20\.12[123456789]\./)) location = "TMCV"
+						else if (addr.match(/^10\.20\.12[123456789]\./)) location = "CV"
 						else if (addr.match(/^10\.20\.30\./)) location = "UV89"
 						else if (addr.match(/^10\.20\.10\./)) location = "TMLB"
 						else if (addr.match(/^10\.40\.10\./)) location = "TMLB-OBR1"
@@ -124,17 +124,35 @@ const server = net.createServer((conn) => {
 						else if (addr.match(/^10\.40\.220\./)) location = "TMLB-OBC1"
 						else if (addr.match(/^10\.40\.221\./)) location = "TMLB-TCR1"
 						else if (addr.match(/^10\.40\.222\./)) location = "TMLB-TCR2"
-						else if (addr.match(/^10\.41\.1\./)) location = "TMCV-R1"
-						else if (addr.match(/^10\.41\.2\./)) location = "TMCV-R2"
-						else if (addr.match(/^10\.41\.3\./)) location = "TMCV-R3"
-						else if (addr.match(/^10\.41\.4\./)) location = "TMCV-R4"
-						else if (addr.match(/^10\.41\.5\./)) location = "TMCV-R5"
+						
+						// venue racks
+						else if (addr.match(/^10\.41\.1\./)) location = "CV-EXT-R1"
+						else if (addr.match(/^10\.41\.2\./)) location = "CV-EXT-R2"
+						else if (addr.match(/^10\.41\.3\./)) location = "CV-EXT-R3"
+						else if (addr.match(/^10\.41\.4\./)) location = "CV-EXT-R4"
+						else if (addr.match(/^10\.41\.5\./)) location = "CV-EXT-R5"
+
+						// kirker
+						else if (addr.match(/^10\.42\.0\./)) location = "NRK-TYHOLT"
+						else if (addr.match(/^10\.42\.1\./)) location = "CV-K1-LUR"
+						else if (addr.match(/^10\.42\.2\./)) location = "CV-K2-FOL"
+						else if (addr.match(/^10\.42\.3\./)) location = "CV-K3-BYA"
+						else if (addr.match(/^10\.42\.4\./)) location = "CV-K4-FIL"
+						else if (addr.match(/^10\.42\.5\./)) location = "CV-K5-FIN"
+						else if (addr.match(/^10\.42\.6\./)) location = "CV-K6-JES"
+
+						// nltv
 						else if (addr.match(/^10\.47\.1\./)) location = "NLTV-R1"
+						else if (addr.match(/^10\.47\.2\./)) location = "NLTV-R2"
+						else if (addr.match(/^10\.47\.3\./)) location = "NLTV-R3"
+						else if (addr.match(/^10\.47\./)) location = "NLTV"
 						else if (addr.match(/^10\.40\./)) location = "TMLB EXT"
 						else if (addr.match(/^10\.47\./)) location = "NLTV EXT"
 						else if (addr.match(/^80.241.92.21[59]/)) location = "UV89"
 						
 						host = host.replace(/\.LOCAL/,"");
+						host = host.replace(/\.AD\.OAL\.NO/,"");
+						host = host.replace(/NLTV-R/,"R");
 
 						if (label === 'Decoding Channel') allowed = false;
 						let loc = location.toUpperCase() + " - " + host.toUpperCase()
